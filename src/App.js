@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import { useEffect } from 'react';
+import { Route, Switch } from "react-router-dom";
+import cityApi from './api/cityApi';
 import './App.css';
+import { NotFound, PrivateRoute } from './components/Common';
+import { Admin } from './components/Layout';
+import LoginPage from './features/auth/pages/LoginPage';
 
 function App() {
+
+  useEffect(() => {
+    cityApi.getAll().then((response) => console.log("response", response));
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Switch>
+        <Route path="/login">
+          <LoginPage/>
+        </Route>
+        <PrivateRoute path="/admin">
+          <Admin/>
+        </PrivateRoute>
+        <Route>
+          <NotFound/>
+        </Route>
+      </Switch>
     </div>
   );
 }
